@@ -35,12 +35,6 @@ The public dashboard shows local community metrics:
 
 CPU-hours are local estimates from service/runtime data. They are not official Lichess contribution stats.
 
-## Why not "games analyzed"?
-
-`idlefish` does not show exact games analyzed by default because that number is easy to misrepresent.
-
-Unless fishnet itself clearly exposes reliable local counts, this project uses CPU-hours as the honest metric: compute capacity offered to the free chess commons.
-
 ## Join with a machine
 
 1. Request a fishnet key from Lichess.
