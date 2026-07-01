@@ -2,51 +2,65 @@
 
 Hackerspace idle CPU for the free chess commons.
 
-`idlefish` is a small community helper project for Sanca Hackerspace members who want to donate spare CPU cycles to Lichess using the official fishnet client. It provides conservative systemd examples, local metrics scripts, and a lightweight static dashboard that can be published with GitHub Pages.
+`idlefish` is a small Sanca Hackerspace project for donating spare CPU time to Lichess analysis through fishnet, the volunteer compute client used by Lichess.
 
-This project does not replace fishnet. It helps people install, run, monitor, and explain the official fishnet client responsibly.
+The project helps members run fishnet carefully on desktops, homelab machines, and small VPSes, then publish simple community metrics such as uptime, active nodes, and estimated CPU-hours donated.
 
-## What Lichess fishnet is
+It is not a fishnet replacement and it is not affiliated with Lichess.
 
-Lichess fishnet is the official distributed analysis client used by Lichess to run Stockfish analysis for the free chess community. Volunteers run fishnet on their own machines and donate compute capacity.
+## Why this exists
 
-`idlefish` is unofficial. It is not affiliated with Lichess, and it does not use Lichess branding in a way that suggests endorsement.
+Hackerspaces often have machines that sit idle for long stretches of time. When it is safe to do so, those machines can contribute useful Stockfish analysis capacity to the free chess community.
 
-## Why donate idle CPU
+The goal is not to maximize numbers at any cost. The goal is to make spare compute donation visible, responsible, and easy to turn off.
 
-A hackerspace often has Linux desktops, homelab machines, or small VPSes that are idle for many hours. Donating a small, controlled amount of spare CPU can support free chess analysis while giving members a transparent way to see local uptime, service health, and estimated CPU-hours donated.
+## Safety first
 
-The goal is responsible civic compute, not competition. Keep machines useful for their primary jobs first.
+Fishnet can use a lot of CPU.
 
-## Important safety notes
+On shared machines, small VPSes, or hosts already running services like MQTT, Grafana, Postgres, or TimescaleDB, start with 1 core and watch the machine for load, memory pressure, swap, and service slowdowns.
 
-Fishnet can use significant CPU. On shared desktops, tiny VPSes, and machines already running services such as MQTT, Grafana, Postgres, TimescaleDB, or community dashboards, start with 1 core and watch system load.
+Fishnet keys are personal secrets. Never commit them, publish them in dashboard data, or paste them into issues or chat.
 
-Fishnet keys are personal secrets. Never commit a fishnet key to this repository, a dashboard, a paste, an issue, or a chat log. Run `fishnet configure` manually as the unprivileged `fishnet` user on each machine.
+## What the dashboard shows
 
-## Quick start for members
+The public dashboard shows local community metrics:
 
-1. Request a fishnet key from Lichess. See [docs/getting-started.md](docs/getting-started.md).
-2. Download or build the official fishnet binary.
-3. Install the conservative service:
+- estimated CPU-hours donated
+- active fishnet nodes
+- fishnet service health
+- service restarts
+- load average and available memory
+- public global Lichess fishnet queue status
+
+CPU-hours are local estimates from service/runtime data. They are not official Lichess contribution stats.
+
+## Why not "games analyzed"?
+
+`idlefish` does not show exact games analyzed by default because that number is easy to misrepresent.
+
+Unless fishnet itself clearly exposes reliable local counts, this project uses CPU-hours as the honest metric: compute capacity offered to the free chess commons.
+
+## Join with a machine
+
+1. Request a fishnet key from Lichess.
+2. Download or build the fishnet binary.
+3. Install the conservative systemd service:
 
    ```bash
    sudo scripts/install-fishnet-systemd.sh ./fishnet
    ```
 
-   You can also pass a download URL instead of a local path.
-
-4. Configure fishnet manually as the `fishnet` user:
+4. Configure fishnet manually:
 
    ```bash
    sudo -u fishnet -H /opt/fishnet/bin/fishnet configure
    ```
 
-5. Start and inspect the service:
+5. Start the service:
 
    ```bash
    sudo systemctl enable --now fishnet
-   systemctl status fishnet
    journalctl -u fishnet -f
    ```
 
@@ -56,58 +70,42 @@ Fishnet keys are personal secrets. Never commit a fishnet key to this repository
    IDLEFISH_NODE_NAME=my-node scripts/collect-local-metrics.sh > metrics/nodes/my-node.json
    ```
 
-7. Generate the static dashboard data:
+More detailed setup notes are in [docs/getting-started.md](docs/getting-started.md) and [docs/running-on-small-vps.md](docs/running-on-small-vps.md).
 
-   ```bash
-   python3 scripts/generate-site.py
-   python3 -m http.server -d site 8000
-   ```
+## Publish the dashboard
 
-Open <http://localhost:8000>.
+Generate the static dashboard data:
 
-## Quick start for maintainers
+```bash
+python3 scripts/fetch-lichess-fishnet-status.py metrics/global-status.json
+python3 scripts/generate-site.py
+```
 
-The public page is static and can be published by GitHub Pages without secrets.
+Preview locally:
 
-1. Put node metric JSON files in `metrics/nodes/`.
-2. Optionally fetch the global public Lichess fishnet status:
+```bash
+python3 -m http.server -d site 8000
+```
 
-   ```bash
-   python3 scripts/fetch-lichess-fishnet-status.py metrics/global-status.json
-   ```
+Then open:
 
-3. Generate dashboard data:
+```text
+http://localhost:8000
+```
 
-   ```bash
-   python3 scripts/generate-site.py
-   ```
+GitHub Pages publishes the `site/` directory using the workflow in [.github/workflows/pages.yml](.github/workflows/pages.yml).
 
-4. Commit `site/` updates and push. The workflow in `.github/workflows/pages.yml` publishes `site/`.
+## Project boundaries
 
-## Feel-good metrics
+This project helps people run and monitor fishnet responsibly.
 
-`idlefish` focuses on honest local metrics:
+It does not:
 
-- donated CPU-hours, estimated from local service/runtime data
-- fishnet service uptime
-- number of participating nodes
-- estimated daily CPU-hours when node data includes enough timestamps
-- global Lichess fishnet queue status from the public status endpoint
-
-These are local community metrics. They are not official Lichess contribution stats.
-
-## Why not show exact games analyzed
-
-`idlefish` does not claim exact "games analyzed" by default because that would be easy to overstate. Unless official fishnet logs clearly and reliably expose that information on a local node, the dashboard sticks to CPU-hours donated and service health. CPU-hours are understandable, local, and honest: they describe compute capacity offered, not guaranteed completed work.
-
-## Boundaries
-
-- Do not implement a fake fishnet client.
-- Do not reverse-engineer Lichess.
-- Do not scrape private Lichess data.
-- Do not expose fishnet API keys.
-- Do not claim exact games analyzed unless fishnet logs clearly provide that information.
-- Treat CPU-hours donated as the primary local metric.
+- implement a fishnet client
+- reverse-engineer Lichess
+- scrape private Lichess data
+- store fishnet keys
+- claim official contribution stats
 
 ## License
 
