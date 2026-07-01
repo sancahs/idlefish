@@ -1,0 +1,36 @@
+[Unit]
+Description=Official fishnet client for Lichess analysis
+Documentation=https://github.com/lichess-org/fishnet
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=fishnet
+Group=fishnet
+WorkingDirectory=/var/lib/fishnet
+ExecStart=/opt/fishnet/bin/fishnet --auto-update
+Restart=on-failure
+RestartSec=30
+
+# Conservative defaults for shared desktops, hackerspace machines, and small VPSes.
+# Fishnet can use CPU heavily. Start small, observe load, and only loosen limits
+# on machines where that is appropriate.
+Nice=19
+IOSchedulingClass=idle
+CPUWeight=10
+
+# These memory limits are intentionally cautious. You may need to raise them
+# depending on configured cores, Stockfish behavior, and host size.
+MemoryHigh=300M
+MemoryMax=500M
+
+# Basic hardening. fishnet still needs network access and its own state dir.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/fishnet
+
+[Install]
+WantedBy=multi-user.target

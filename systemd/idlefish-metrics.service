@@ -1,0 +1,7 @@
+[Unit]
+Description=Collect local idlefish metrics
+
+[Service]
+Type=oneshot
+Environment=IDLEFISH_NODE_NAME=%H
+ExecStart=/bin/sh -c 'mkdir -p /var/lib/idlefish/metrics/nodes && /usr/local/bin/collect-local-metrics.sh > /var/lib/idlefish/metrics/nodes/%H.json'

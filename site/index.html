@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>idlefish</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Unofficial community helper for the official fishnet client</p>
+      <h1>idlefish</h1>
+      <p class="subtitle">Hackerspace idle CPU for the free chess commons</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="summary-grid" aria-label="Community metrics summary">
+      <article class="metric">
+        <span class="metric-label">Estimated CPU-hours donated</span>
+        <strong id="total-cpu-hours">...</strong>
+      </article>
+      <article class="metric">
+        <span class="metric-label">Active nodes</span>
+        <strong id="active-nodes">...</strong>
+      </article>
+      <article class="metric">
+        <span class="metric-label">Last update</span>
+        <strong id="last-update">...</strong>
+      </article>
+    </section>
+
+    <section class="notice" aria-label="Metrics explanation">
+      <p>These are local community metrics. They are not official Lichess contribution stats. CPU-hours are estimated from local service/runtime data.</p>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <h2>Participating nodes</h2>
+        <p id="node-count">Loading node metrics...</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Node</th>
+              <th scope="col">Status</th>
+              <th scope="col">CPU-hours</th>
+              <th scope="col">Restarts</th>
+              <th scope="col">Load average</th>
+              <th scope="col">Memory available</th>
+              <th scope="col">Last seen</th>
+            </tr>
+          </thead>
+          <tbody id="nodes-table">
+            <tr><td colspan="7">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <h2>Global Lichess fishnet status</h2>
+        <p>Public global queue data from Lichess, not hackerspace-specific data.</p>
+      </div>
+      <pre id="global-status">Loading...</pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>idlefish is unofficial and community-run. Run spare compute responsibly.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
