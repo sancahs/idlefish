@@ -6,6 +6,8 @@ Hackerspace idle CPU for the free chess commons.
 
 The project helps members run fishnet carefully on desktops, homelab machines, and small VPSes, then publish simple community metrics such as uptime, active nodes, and estimated CPU-hours donated.
 
+The dashboard uses a pull model: each participating machine publishes a small read-only JSON metrics file, and GitHub Actions periodically fetches those files to rebuild the public page. Contributors do not need GitHub push access, and they can adapt the publishing setup to their own Linux environment.
+
 It is not a fishnet replacement and it is not affiliated with Lichess.
 
 ## Why this exists
@@ -39,7 +41,7 @@ CPU-hours are local estimates from service/runtime data. They are not official L
 
 1. Request a fishnet key from Lichess.
 2. Download or build the fishnet binary.
-3. Install the conservative systemd service:
+3. Install the conservative systemd service, or adapt the service setup to your environment:
 
    ```bash
    sudo scripts/install-fishnet-systemd.sh ./fishnet
@@ -61,16 +63,21 @@ CPU-hours are local estimates from service/runtime data. They are not official L
 6. Collect local metrics:
 
    ```bash
-   IDLEFISH_NODE_NAME=my-node scripts/collect-local-metrics.sh > metrics/nodes/my-node.json
+   IDLEFISH_NODE_NAME=my-node scripts/collect-local-metrics.sh > /var/www/idlefish/my-node.json
    ```
 
-More detailed setup notes are in [docs/getting-started.md](docs/getting-started.md) and [docs/running-on-small-vps.md](docs/running-on-small-vps.md).
+7. Ask a maintainer to add your public metrics URL to `config/nodes.json`.
+
+More detailed setup notes are in [docs/getting-started.md](docs/getting-started.md), [docs/running-on-small-vps.md](docs/running-on-small-vps.md), and [docs/publishing-node-metrics.md](docs/publishing-node-metrics.md).
+
+The v0 pull-based dashboard architecture is described in [docs/architecture-v0.md](docs/architecture-v0.md).
 
 ## Publish the dashboard
 
 Generate the static dashboard data:
 
 ```bash
+python3 scripts/fetch-node-metrics.py
 python3 scripts/fetch-lichess-fishnet-status.py metrics/global-status.json
 python3 scripts/generate-site.py
 ```
@@ -87,7 +94,7 @@ Then open:
 http://localhost:8000
 ```
 
-GitHub Pages publishes the `site/` directory using the workflow in [.github/workflows/pages.yml](.github/workflows/pages.yml).
+GitHub Pages publishes the `site/` directory using the workflow in [.github/workflows/pages.yml](.github/workflows/pages.yml). The workflow also runs on a schedule, fetches every URL listed in `config/nodes.json`, and rebuilds the dashboard without requiring node operators to commit anything.
 
 ## Project boundaries
 

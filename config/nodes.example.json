@@ -2,11 +2,13 @@
   {
     "node_name": "sanca-lab-desktop-1",
     "public_label": "Lab desktop 1",
+    "metrics_url": "https://example.org/idlefish/sanca-lab-desktop-1.json",
     "notes": "Example only. Use pseudonymous names when members prefer privacy."
   },
   {
     "node_name": "tiny-vps-a",
     "public_label": "Tiny VPS A",
+    "metrics_url": "https://example.net/idlefish/tiny-vps-a.json",
     "notes": "Start with 1 core and watch load."
   }
 ]

@@ -46,10 +46,10 @@ The script does not collect:
 
 ## Removing a node from the public page
 
-Remove that node's JSON file from `metrics/nodes/`, regenerate the site, and publish again:
+Remove that node's entry from `config/nodes.json`, regenerate the site, and publish again:
 
 ```bash
-rm metrics/nodes/member-node-a.json
+python3 scripts/fetch-node-metrics.py
 python3 scripts/generate-site.py
 ```
 

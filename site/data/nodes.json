@@ -2,7 +2,7 @@
   "aggregate": {
     "active_nodes": 1,
     "estimated_cpu_hours_today": 3.5,
-    "generated_at_utc": "2026-07-01T17:53:55Z",
+    "generated_at_utc": "2026-07-01T18:19:47Z",
     "last_update_utc": "2026-07-01T12:00:00Z",
     "notes": "Local community metrics; not official Lichess contribution stats.",
     "total_estimated_cpu_hours": 12.34,
