@@ -7,6 +7,10 @@
   "cpu_usage_nsec": 44424000000000,
   "estimated_cpu_hours": 12.34,
   "estimated_cpu_hours_today": 3.5,
+  "fishnet_analysis_jobs_finished": 42,
+  "fishnet_batches": 120,
+  "fishnet_positions": 4321,
+  "fishnet_total_nodes": 987654321,
   "load_average": "0.12 0.20 0.18",
   "memory_available_kb": 123456,
   "notes": "Local estimate only; not an official Lichess contribution counter."

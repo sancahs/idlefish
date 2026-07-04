@@ -36,7 +36,7 @@ function renderNodes(data) {
 
   const table = document.getElementById("nodes-table");
   if (!nodes.length) {
-    table.innerHTML = '<tr><td colspan="7">No node metrics found yet.</td></tr>';
+    table.innerHTML = '<tr><td colspan="9">No node metrics found yet.</td></tr>';
     return;
   }
 
@@ -45,12 +45,19 @@ function renderNodes(data) {
       <td>${escapeHtml(node.node_name || "unknown-node")}</td>
       <td>${statusBadge(Boolean(node.fishnet_active))}</td>
       <td>${fmtNumber.format(Number(node.estimated_cpu_hours || 0))}</td>
+      <td>${formatOptionalInteger(node.fishnet_analysis_jobs_finished)}</td>
+      <td>${formatOptionalInteger(node.fishnet_batches)}</td>
       <td>${fmtInteger.format(Number(node.n_restarts || 0))}</td>
       <td>${escapeHtml(node.load_average || "unknown")}</td>
       <td>${formatMemory(node.memory_available_kb)}</td>
       <td>${formatDate(node.timestamp_utc)}</td>
     </tr>
   `).join("");
+}
+
+function formatOptionalInteger(value) {
+  if (typeof value !== "number") return "unknown";
+  return fmtInteger.format(value);
 }
 
 function renderGlobalStatus(status) {
@@ -82,7 +89,7 @@ async function loadDashboard() {
   } catch (error) {
     text("node-count", "Could not load dashboard data.");
     document.getElementById("nodes-table").innerHTML =
-      `<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;
+      `<tr><td colspan="9">${escapeHtml(error.message)}</td></tr>`;
     text("global-status", error.message);
   }
 }

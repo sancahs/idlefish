@@ -30,6 +30,7 @@ Do not publish IP addresses.
 - fishnet service active-enter timestamp
 - fishnet service restart count
 - fishnet service CPU usage from systemd
+- optional aggregate fishnet log counters, without publishing individual game IDs
 - load average from `/proc/loadavg`
 - available memory from `/proc/meminfo`
 
@@ -38,6 +39,7 @@ Do not publish IP addresses.
 The script does not collect:
 
 - fishnet keys
+- individual Lichess game IDs from fishnet logs
 - IP addresses
 - Lichess usernames
 - private Lichess data

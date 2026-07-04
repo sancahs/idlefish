@@ -34,6 +34,8 @@ Important fields:
 - `timestamp_utc`: when the metrics were generated
 - `fishnet_active`: whether fishnet is currently running
 - `estimated_cpu_hours`: local estimate of donated CPU time
+- `fishnet_analysis_jobs_finished`: local best-effort count of completed fishnet jobs, if journal logs are readable
+- `fishnet_batches`: latest cumulative fishnet batch count, if journal logs are readable
 - `n_restarts`: local restart count, if available
 - `load_average`: host load average, if available
 - `memory_available_kb`: available memory, if available
@@ -47,6 +49,8 @@ Example:
   "timestamp_utc": "2026-07-01T12:00:00Z",
   "fishnet_active": true,
   "estimated_cpu_hours": 12.34,
+  "fishnet_analysis_jobs_finished": 42,
+  "fishnet_batches": 120,
   "n_restarts": 0,
   "load_average": "0.12 0.20 0.18",
   "memory_available_kb": 123456,

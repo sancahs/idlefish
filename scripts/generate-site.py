@@ -73,6 +73,17 @@ def cpu_today(nodes: list[dict[str, Any]]) -> float | None:
     return round(sum(values), 3)
 
 
+def sum_optional_number(nodes: list[dict[str, Any]], key: str) -> int | None:
+    values = []
+    for node in nodes:
+        value = node.get(key)
+        if isinstance(value, (int, float)):
+            values.append(int(value))
+    if not values:
+        return None
+    return sum(values)
+
+
 def aggregate(nodes: list[dict[str, Any]]) -> dict[str, Any]:
     timestamps = [node.get("timestamp_utc") for node in nodes if node.get("timestamp_utc")]
     total_cpu = sum(float(node.get("estimated_cpu_hours") or 0) for node in nodes)
@@ -82,6 +93,10 @@ def aggregate(nodes: list[dict[str, Any]]) -> dict[str, Any]:
         "active_nodes": sum(1 for node in nodes if bool(node.get("fishnet_active"))),
         "total_estimated_cpu_hours": round(total_cpu, 3),
         "estimated_cpu_hours_today": cpu_today(nodes),
+        "total_fishnet_analysis_jobs_finished": sum_optional_number(nodes, "fishnet_analysis_jobs_finished"),
+        "total_fishnet_batches": sum_optional_number(nodes, "fishnet_batches"),
+        "total_fishnet_positions": sum_optional_number(nodes, "fishnet_positions"),
+        "total_fishnet_nodes": sum_optional_number(nodes, "fishnet_total_nodes"),
         "last_update_utc": max(timestamps) if timestamps else None,
         "notes": "Local community metrics; not official Lichess contribution stats.",
     }

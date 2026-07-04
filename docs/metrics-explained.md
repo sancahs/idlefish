@@ -26,6 +26,17 @@ Values may reset if the service, machine, or accounting state resets. Different 
 
 CPU-hours are the primary feel-good metric because they describe donated capacity without pretending to know more than the local node knows.
 
+## Fishnet log counters
+
+When the local system journal is readable, `idlefish` also reports a few fishnet-derived counters from the current service run:
+
+- `fishnet_analysis_jobs_finished`: count of completed fishnet jobs logged as Lichess game URLs
+- `fishnet_batches`: latest cumulative fishnet batch count
+- `fishnet_positions`: latest cumulative position count
+- `fishnet_total_nodes`: latest cumulative Stockfish node count
+
+These counters are best-effort local metrics. They may reset when the fishnet service restarts, and they are not official Lichess contribution stats. The public JSON intentionally reports only counts, not individual game IDs.
+
 ## Local metrics vs global Lichess queue status
 
 Local metrics come from machines participating in this community dashboard:
