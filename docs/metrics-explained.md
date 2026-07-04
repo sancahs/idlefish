@@ -37,6 +37,20 @@ When the local system journal is readable, `idlefish` also reports a few fishnet
 
 These counters are best-effort local metrics. They may reset when the fishnet service restarts, and they are not official Lichess contribution stats. The public JSON intentionally reports only counts, not individual game IDs.
 
+## Lifetime counters
+
+`idlefish` keeps a small local state file so totals can survive fishnet restarts and machine reboots. By default, root-run collection stores it under `/var/lib/idlefish`; unprivileged collection stores it under `${XDG_STATE_HOME}` or `~/.local/state/idlefish`.
+
+Lifetime fields include:
+
+- `lifetime_estimated_cpu_hours`
+- `lifetime_fishnet_analysis_jobs_finished`
+- `lifetime_fishnet_batches`
+- `lifetime_fishnet_positions`
+- `lifetime_fishnet_total_nodes`
+
+The state path can be changed with `IDLEFISH_STATE_FILE` or `IDLEFISH_STATE_DIR`. These are still local estimates, not official Lichess contribution stats.
+
 ## Local metrics vs global Lichess queue status
 
 Local metrics come from machines participating in this community dashboard:

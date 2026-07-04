@@ -36,6 +36,8 @@ Important fields:
 - `estimated_cpu_hours`: local estimate of donated CPU time
 - `fishnet_analysis_jobs_finished`: local best-effort count of completed fishnet jobs, if journal logs are readable
 - `fishnet_batches`: latest cumulative fishnet batch count, if journal logs are readable
+- `lifetime_estimated_cpu_hours`: persisted local estimate of CPU time across fishnet restarts
+- `lifetime_fishnet_analysis_jobs_finished`: persisted local best-effort count of completed fishnet jobs
 - `n_restarts`: local restart count, if available
 - `load_average`: host load average, if available
 - `memory_available_kb`: available memory, if available
@@ -51,6 +53,8 @@ Example:
   "estimated_cpu_hours": 12.34,
   "fishnet_analysis_jobs_finished": 42,
   "fishnet_batches": 120,
+  "lifetime_estimated_cpu_hours": 12.34,
+  "lifetime_fishnet_analysis_jobs_finished": 42,
   "n_restarts": 0,
   "load_average": "0.12 0.20 0.18",
   "memory_available_kb": 123456,
@@ -118,6 +122,7 @@ sudo tee /etc/idlefish/metrics.env >/dev/null <<'EOF'
 IDLEFISH_NODE_NAME=my-node
 IDLEFISH_METRICS_DIR=/var/www/idlefish
 IDLEFISH_METRICS_FILE=my-node.json
+IDLEFISH_STATE_DIR=/var/lib/idlefish
 EOF
 ```
 

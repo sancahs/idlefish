@@ -44,9 +44,9 @@ function renderNodes(data) {
     <tr>
       <td>${escapeHtml(node.node_name || "unknown-node")}</td>
       <td>${statusBadge(Boolean(node.fishnet_active))}</td>
-      <td>${fmtNumber.format(Number(node.estimated_cpu_hours || 0))}</td>
-      <td>${formatOptionalInteger(node.fishnet_analysis_jobs_finished)}</td>
-      <td>${formatOptionalInteger(node.fishnet_batches)}</td>
+      <td>${fmtNumber.format(Number(node.lifetime_estimated_cpu_hours || node.estimated_cpu_hours || 0))}</td>
+      <td>${formatOptionalInteger(node.lifetime_fishnet_analysis_jobs_finished ?? node.fishnet_analysis_jobs_finished)}</td>
+      <td>${formatOptionalInteger(node.lifetime_fishnet_batches ?? node.fishnet_batches)}</td>
       <td>${fmtInteger.format(Number(node.n_restarts || 0))}</td>
       <td>${escapeHtml(node.load_average || "unknown")}</td>
       <td>${formatMemory(node.memory_available_kb)}</td>

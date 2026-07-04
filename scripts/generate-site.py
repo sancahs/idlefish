@@ -84,19 +84,37 @@ def sum_optional_number(nodes: list[dict[str, Any]], key: str) -> int | None:
     return sum(values)
 
 
+def prefer_optional_number(primary: int | None, fallback: int | None) -> int | None:
+    if primary is not None:
+        return primary
+    return fallback
+
+
 def aggregate(nodes: list[dict[str, Any]]) -> dict[str, Any]:
     timestamps = [node.get("timestamp_utc") for node in nodes if node.get("timestamp_utc")]
-    total_cpu = sum(float(node.get("estimated_cpu_hours") or 0) for node in nodes)
+    total_cpu = sum(float(node.get("lifetime_estimated_cpu_hours") or node.get("estimated_cpu_hours") or 0) for node in nodes)
     return {
         "generated_at_utc": now_utc(),
         "total_nodes": len(nodes),
         "active_nodes": sum(1 for node in nodes if bool(node.get("fishnet_active"))),
         "total_estimated_cpu_hours": round(total_cpu, 3),
         "estimated_cpu_hours_today": cpu_today(nodes),
-        "total_fishnet_analysis_jobs_finished": sum_optional_number(nodes, "fishnet_analysis_jobs_finished"),
-        "total_fishnet_batches": sum_optional_number(nodes, "fishnet_batches"),
-        "total_fishnet_positions": sum_optional_number(nodes, "fishnet_positions"),
-        "total_fishnet_nodes": sum_optional_number(nodes, "fishnet_total_nodes"),
+        "total_fishnet_analysis_jobs_finished": prefer_optional_number(
+            sum_optional_number(nodes, "lifetime_fishnet_analysis_jobs_finished"),
+            sum_optional_number(nodes, "fishnet_analysis_jobs_finished"),
+        ),
+        "total_fishnet_batches": prefer_optional_number(
+            sum_optional_number(nodes, "lifetime_fishnet_batches"),
+            sum_optional_number(nodes, "fishnet_batches"),
+        ),
+        "total_fishnet_positions": prefer_optional_number(
+            sum_optional_number(nodes, "lifetime_fishnet_positions"),
+            sum_optional_number(nodes, "fishnet_positions"),
+        ),
+        "total_fishnet_nodes": prefer_optional_number(
+            sum_optional_number(nodes, "lifetime_fishnet_total_nodes"),
+            sum_optional_number(nodes, "fishnet_total_nodes"),
+        ),
         "last_update_utc": max(timestamps) if timestamps else None,
         "notes": "Local community metrics; not official Lichess contribution stats.",
     }

@@ -31,6 +31,7 @@ Do not publish IP addresses.
 - fishnet service restart count
 - fishnet service CPU usage from systemd
 - optional aggregate fishnet log counters, without publishing individual game IDs
+- persisted lifetime totals from the local idlefish state file
 - load average from `/proc/loadavg`
 - available memory from `/proc/meminfo`
 
