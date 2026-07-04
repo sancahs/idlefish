@@ -97,9 +97,9 @@ def aggregate(nodes: list[dict[str, Any]]) -> dict[str, Any]:
             sum_optional_number(nodes, "lifetime_fishnet_positions"),
             sum_optional_number(nodes, "fishnet_positions"),
         ),
-        "total_fishnet_nodes": prefer_optional_number(
-            sum_optional_number(nodes, "lifetime_fishnet_total_nodes"),
-            sum_optional_number(nodes, "fishnet_total_nodes"),
+        "total_fishnet_stockfish_nodes": prefer_optional_number(
+            sum_optional_number(nodes, "lifetime_fishnet_stockfish_nodes"),
+            sum_optional_number(nodes, "fishnet_stockfish_nodes"),
         ),
         "last_update_utc": max(timestamps) if timestamps else None,
         "notes": "Local community metrics; not official Lichess contribution stats.",

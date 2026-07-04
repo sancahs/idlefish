@@ -65,17 +65,17 @@ ESTIMATED_CPU_HOURS=$(awk -v ns="${CPU_USAGE_NSEC}" 'BEGIN { printf "%.6f", ns /
 FISHNET_ANALYSIS_JOBS_FINISHED=null
 FISHNET_BATCHES=null
 FISHNET_POSITIONS=null
-FISHNET_TOTAL_NODES=null
+FISHNET_STOCKFISH_NODES=null
 
 if [[ -n "${ACTIVE_ENTER_TIMESTAMP}" ]]; then
   if JOURNAL_TEXT=$(journalctl -u "${SERVICE_NAME}" --since "${ACTIVE_ENTER_TIMESTAMP}" --no-pager -o cat 2>/dev/null); then
-    read -r FISHNET_ANALYSIS_JOBS_FINISHED FISHNET_BATCHES FISHNET_POSITIONS FISHNET_TOTAL_NODES < <(
+    read -r FISHNET_ANALYSIS_JOBS_FINISHED FISHNET_BATCHES FISHNET_POSITIONS FISHNET_STOCKFISH_NODES < <(
       printf '%s\n' "${JOURNAL_TEXT}" | python3 -c '
 import re
 import sys
 
 finished = 0
-batches = positions = total_nodes = "null"
+batches = positions = stockfish_nodes = "null"
 finished_re = re.compile(r"https://lichess\.org/[A-Za-z0-9]+ finished")
 summary_re = re.compile(
     r"><> v[^:]+:.*?,\s*([0-9.]+)\s+batches,\s*([0-9.]+)\s+positions,\s*([0-9.]+)\s+total nodes"
@@ -91,9 +91,9 @@ for line in sys.stdin:
     if match:
         batches = clean_int(match.group(1))
         positions = clean_int(match.group(2))
-        total_nodes = clean_int(match.group(3))
+        stockfish_nodes = clean_int(match.group(3))
 
-print(f"{finished} {batches} {positions} {total_nodes}")
+print(f"{finished} {batches} {positions} {stockfish_nodes}")
 '
     )
   fi
@@ -108,7 +108,7 @@ STATE_RESULT=$(IDLEFISH_STATE_FILE_RESOLVED="${STATE_FILE}" \
   IDLEFISH_JOBS_FINISHED="${FISHNET_ANALYSIS_JOBS_FINISHED}" \
   IDLEFISH_BATCHES="${FISHNET_BATCHES}" \
   IDLEFISH_POSITIONS="${FISHNET_POSITIONS}" \
-  IDLEFISH_TOTAL_NODES="${FISHNET_TOTAL_NODES}" \
+  IDLEFISH_STOCKFISH_NODES="${FISHNET_STOCKFISH_NODES}" \
   python3 -c '
 import json
 import os
@@ -130,7 +130,7 @@ current = {
     "fishnet_analysis_jobs_finished": parse_int("IDLEFISH_JOBS_FINISHED"),
     "fishnet_batches": parse_int("IDLEFISH_BATCHES"),
     "fishnet_positions": parse_int("IDLEFISH_POSITIONS"),
-    "fishnet_total_nodes": parse_int("IDLEFISH_TOTAL_NODES"),
+    "fishnet_stockfish_nodes": parse_int("IDLEFISH_STOCKFISH_NODES"),
 }
 
 state = {}
@@ -148,6 +148,11 @@ if not isinstance(lifetime, dict):
 last = state.get("last")
 if not isinstance(last, dict):
     last = {}
+lifetime = {key: lifetime.get(key) for key in current if key in lifetime}
+last = {
+    "active_enter_timestamp": last.get("active_enter_timestamp"),
+    **{key: last.get(key) for key in current if key in last},
+}
 
 same_run = bool(active_enter) and active_enter == last.get("active_enter_timestamp")
 keys = tuple(current)
@@ -200,13 +205,13 @@ print(
             out_int(lifetime.get("fishnet_analysis_jobs_finished")),
             out_int(lifetime.get("fishnet_batches")),
             out_int(lifetime.get("fishnet_positions")),
-            out_int(lifetime.get("fishnet_total_nodes")),
+            out_int(lifetime.get("fishnet_stockfish_nodes")),
             state_ok,
         ]
     )
 )
 ' 2>/dev/null || printf 'null null null null null null false')
-read -r LIFETIME_CPU_USAGE_NSEC LIFETIME_ESTIMATED_CPU_HOURS LIFETIME_JOBS_FINISHED LIFETIME_BATCHES LIFETIME_POSITIONS LIFETIME_TOTAL_NODES STATE_WRITE_OK <<<"${STATE_RESULT}"
+read -r LIFETIME_CPU_USAGE_NSEC LIFETIME_ESTIMATED_CPU_HOURS LIFETIME_JOBS_FINISHED LIFETIME_BATCHES LIFETIME_POSITIONS LIFETIME_STOCKFISH_NODES STATE_WRITE_OK <<<"${STATE_RESULT}"
 
 NODE_JSON=$(printf '%s' "${NODE_NAME}" | json_escape)
 ACTIVE_TS_JSON=$(printf '%s' "${ACTIVE_ENTER_TIMESTAMP}" | json_escape)
@@ -224,13 +229,13 @@ cat <<JSON
   "fishnet_analysis_jobs_finished": ${FISHNET_ANALYSIS_JOBS_FINISHED},
   "fishnet_batches": ${FISHNET_BATCHES},
   "fishnet_positions": ${FISHNET_POSITIONS},
-  "fishnet_total_nodes": ${FISHNET_TOTAL_NODES},
+  "fishnet_stockfish_nodes": ${FISHNET_STOCKFISH_NODES},
   "lifetime_cpu_usage_nsec": ${LIFETIME_CPU_USAGE_NSEC},
   "lifetime_estimated_cpu_hours": ${LIFETIME_ESTIMATED_CPU_HOURS},
   "lifetime_fishnet_analysis_jobs_finished": ${LIFETIME_JOBS_FINISHED},
   "lifetime_fishnet_batches": ${LIFETIME_BATCHES},
   "lifetime_fishnet_positions": ${LIFETIME_POSITIONS},
-  "lifetime_fishnet_total_nodes": ${LIFETIME_TOTAL_NODES},
+  "lifetime_fishnet_stockfish_nodes": ${LIFETIME_STOCKFISH_NODES},
   "lifetime_state_write_ok": ${STATE_WRITE_OK},
   "load_average": ${LOAD_JSON},
   "memory_available_kb": ${MEMORY_AVAILABLE_KB},

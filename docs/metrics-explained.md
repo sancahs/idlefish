@@ -33,9 +33,11 @@ When the local system journal is readable, `idlefish` also reports a few fishnet
 - `fishnet_analysis_jobs_finished`: count of completed fishnet jobs logged as Lichess game URLs
 - `fishnet_batches`: latest cumulative fishnet batch count
 - `fishnet_positions`: latest cumulative position count
-- `fishnet_total_nodes`: latest cumulative Stockfish node count
+- `fishnet_stockfish_nodes`: latest cumulative Stockfish search node count
 
 These counters are best-effort local metrics. They may reset when the fishnet service restarts, and they are not official Lichess contribution stats. The public JSON intentionally reports only counts, not individual game IDs.
+
+In this context, a Stockfish node is a search-tree node evaluated by the chess engine. It is not a contributor machine or VPS.
 
 ## Lifetime counters
 
@@ -47,7 +49,7 @@ Lifetime fields include:
 - `lifetime_fishnet_analysis_jobs_finished`
 - `lifetime_fishnet_batches`
 - `lifetime_fishnet_positions`
-- `lifetime_fishnet_total_nodes`
+- `lifetime_fishnet_stockfish_nodes`
 
 The state path can be changed with `IDLEFISH_STATE_FILE` or `IDLEFISH_STATE_DIR`. These are still local estimates, not official Lichess contribution stats.
 
