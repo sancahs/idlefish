@@ -75,7 +75,8 @@ h2 {
 
 .metric,
 .panel,
-.notice {
+.notice,
+.support-panel {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -108,6 +109,55 @@ h2 {
 
 .notice p {
   margin: 0;
+}
+
+.support-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  margin: 0 0 20px;
+  padding: 18px;
+}
+
+.support-panel h2 {
+  margin-bottom: 6px;
+}
+
+.support-panel p:last-child {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.support-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.support-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: var(--accent-strong);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.support-actions a:first-child {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.support-actions a:focus,
+.support-actions a:hover {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px rgb(38 115 93 / 14%);
 }
 
 .panel {
@@ -220,6 +270,14 @@ footer {
 
   .glossary dl {
     grid-template-columns: 1fr;
+  }
+
+  .support-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .support-actions {
+    justify-content: flex-start;
   }
 
   .site-header {

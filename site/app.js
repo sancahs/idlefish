@@ -34,7 +34,7 @@ function renderNodes(data) {
 
   const table = document.getElementById("nodes-table");
   if (!nodes.length) {
-    table.innerHTML = '<tr><td colspan="6">No node metrics found yet.</td></tr>';
+    table.innerHTML = '<tr><td colspan="7">No node metrics found yet.</td></tr>';
     return;
   }
 
@@ -75,7 +75,7 @@ async function loadDashboard() {
   } catch (error) {
     text("node-count", "Could not load dashboard data.");
     document.getElementById("nodes-table").innerHTML =
-      `<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;
+      `<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;
   }
 }
 

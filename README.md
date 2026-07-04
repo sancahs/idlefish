@@ -38,6 +38,8 @@ The public dashboard shows local community metrics:
 
 CPU-hours are local estimates from service/runtime data. They are not official Lichess contribution stats.
 
+The dashboard also links to Lichess contribution options and the official fishnet project so visitors can find other ways to support the free chess commons.
+
 ## Join with a machine
 
 1. Request a fishnet key from Lichess.
