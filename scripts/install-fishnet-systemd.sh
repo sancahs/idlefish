@@ -11,7 +11,7 @@ a conservative systemd service example as fishnet.service.
 This script does not ask for, store, or print your fishnet key. Configure the
 key manually after installation:
 
-  sudo -u fishnet -H /opt/fishnet/bin/fishnet configure
+  sudo -u fishnet -H sh -lc 'cd /var/lib/fishnet && /opt/fishnet/bin/fishnet configure'
 USAGE
 }
 
@@ -95,7 +95,7 @@ Next steps:
 
   1. Configure your personal fishnet key manually:
 
-       sudo -u fishnet -H /opt/fishnet/bin/fishnet configure
+       sudo -u fishnet -H sh -lc 'cd /var/lib/fishnet && /opt/fishnet/bin/fishnet configure'
 
      Never commit or publish this key.
 

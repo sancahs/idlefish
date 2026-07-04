@@ -15,7 +15,24 @@ Treat the key like a password:
 
 ## Install the fishnet binary
 
-Download or build the official fishnet binary from the official fishnet project. This repository does not provide a fishnet implementation.
+Download or build the official fishnet binary from the [official fishnet releases](https://github.com/lichess-org/fishnet/releases). This repository does not provide a fishnet implementation.
+
+On a new machine, clone this project first so you have the installer scripts:
+
+```bash
+git clone https://github.com/sancahs/idlefish.git
+cd idlefish
+```
+
+On a typical x86_64 Linux VPS, copy the Linux `x86_64-unknown-linux-musl` download URL from the latest release. The URL should include the release version, for example:
+
+```bash
+curl --fail --location --output fishnet https://fishnet-releases.s3.dualstack.eu-west-3.amazonaws.com/v2.13.2/fishnet-x86_64-unknown-linux-musl
+chmod +x fishnet
+./fishnet --version
+```
+
+Use the current release URL from GitHub, not this example forever. Keep `--fail` so `curl` exits instead of saving an XML or HTML error page as `fishnet`.
 
 After you have a local binary, install it:
 
@@ -36,7 +53,7 @@ Use the real URL from the official project, not the placeholder above.
 Run configure manually as the unprivileged `fishnet` user:
 
 ```bash
-sudo -u fishnet -H /opt/fishnet/bin/fishnet configure
+sudo -u fishnet -H sh -lc 'cd /var/lib/fishnet && /opt/fishnet/bin/fishnet configure'
 ```
 
 Start with 1 core on shared machines, desktops, small VPSes, and anything already running community services.

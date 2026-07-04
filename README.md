@@ -40,33 +40,41 @@ CPU-hours are local estimates from service/runtime data. They are not official L
 ## Join with a machine
 
 1. Request a fishnet key from Lichess.
-2. Download or build the fishnet binary.
-3. Install the conservative systemd service, or adapt the service setup to your environment:
+2. Clone this project on the machine:
+
+   ```bash
+   git clone https://github.com/sancahs/idlefish.git
+   cd idlefish
+   ```
+
+3. Download or build the fishnet binary from the [official fishnet releases](https://github.com/lichess-org/fishnet/releases), saving it as `./fishnet` inside this directory.
+
+4. Install the conservative systemd service, or adapt the service setup to your environment:
 
    ```bash
    sudo scripts/install-fishnet-systemd.sh ./fishnet
    ```
 
-4. Configure fishnet manually:
+5. Configure fishnet manually:
 
    ```bash
-   sudo -u fishnet -H /opt/fishnet/bin/fishnet configure
+   sudo -u fishnet -H sh -lc 'cd /var/lib/fishnet && /opt/fishnet/bin/fishnet configure'
    ```
 
-5. Start the service:
+6. Start the service:
 
    ```bash
    sudo systemctl enable --now fishnet
    journalctl -u fishnet -f
    ```
 
-6. Collect local metrics:
+7. Collect local metrics:
 
    ```bash
    IDLEFISH_NODE_NAME=my-node scripts/collect-local-metrics.sh > /var/www/idlefish/my-node.json
    ```
 
-7. Ask a maintainer to add your public metrics URL to `config/nodes.json`.
+8. Ask a maintainer to add your public metrics URL to `config/nodes.json`.
 
 More detailed setup notes are in [docs/getting-started.md](docs/getting-started.md), [docs/running-on-small-vps.md](docs/running-on-small-vps.md), and [docs/publishing-node-metrics.md](docs/publishing-node-metrics.md).
 

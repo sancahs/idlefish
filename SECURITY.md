@@ -7,7 +7,7 @@ Fishnet keys are personal secrets. Never commit them, publish them in dashboard 
 Configure fishnet manually on each node:
 
 ```bash
-sudo -u fishnet -H /opt/fishnet/bin/fishnet configure
+sudo -u fishnet -H sh -lc 'cd /var/lib/fishnet && /opt/fishnet/bin/fishnet configure'
 ```
 
 ## Reporting a security issue
