@@ -1,2 +1,7 @@
 [
+  {
+    "node_name": "falafel-clima",
+    "public_label": "Falafel Clima",
+    "metrics_url": "https://clima.falafel.com.br/idlefish/falafel-clima.json"
+  }
 ]
