@@ -2,7 +2,7 @@
 
 The central dashboard uses a pull model.
 
-Each participating machine publishes one small JSON file over HTTPS. GitHub Actions fetches those files on a schedule, combines them with the public Lichess fishnet status, and republishes the GitHub Pages dashboard.
+Each participating machine publishes one small JSON file over HTTPS. GitHub Actions fetches those files on a schedule and republishes the GitHub Pages dashboard.
 
 Node operators do not need GitHub push access.
 

@@ -60,11 +60,6 @@ function formatOptionalInteger(value) {
   return fmtInteger.format(value);
 }
 
-function renderGlobalStatus(status) {
-  const element = document.getElementById("global-status");
-  element.textContent = JSON.stringify(status, null, 2);
-}
-
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -76,21 +71,15 @@ function escapeHtml(value) {
 
 async function loadDashboard() {
   try {
-    const [nodesResponse, globalResponse] = await Promise.all([
-      fetch("data/nodes.json"),
-      fetch("data/global-status.json"),
-    ]);
+    const nodesResponse = await fetch("data/nodes.json");
 
     if (!nodesResponse.ok) throw new Error(`nodes.json: HTTP ${nodesResponse.status}`);
-    if (!globalResponse.ok) throw new Error(`global-status.json: HTTP ${globalResponse.status}`);
 
     renderNodes(await nodesResponse.json());
-    renderGlobalStatus(await globalResponse.json());
   } catch (error) {
     text("node-count", "Could not load dashboard data.");
     document.getElementById("nodes-table").innerHTML =
       `<tr><td colspan="9">${escapeHtml(error.message)}</td></tr>`;
-    text("global-status", error.message);
   }
 }
 

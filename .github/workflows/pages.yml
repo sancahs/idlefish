@@ -32,7 +32,6 @@ jobs:
       - name: Fetch dashboard data
         run: |
           python3 scripts/fetch-node-metrics.py
-          python3 scripts/fetch-lichess-fishnet-status.py metrics/global-status.json
           python3 scripts/generate-site.py
 
       - name: Upload static site

@@ -33,7 +33,6 @@ The public dashboard shows local community metrics:
 - fishnet service health
 - service restarts
 - load average and available memory
-- public global Lichess fishnet queue status
 
 CPU-hours are local estimates from service/runtime data. They are not official Lichess contribution stats.
 
@@ -86,7 +85,6 @@ Generate the static dashboard data:
 
 ```bash
 python3 scripts/fetch-node-metrics.py
-python3 scripts/fetch-lichess-fishnet-status.py metrics/global-status.json
 python3 scripts/generate-site.py
 ```
 

@@ -51,7 +51,7 @@ Lifetime fields include:
 
 The state path can be changed with `IDLEFISH_STATE_FILE` or `IDLEFISH_STATE_DIR`. These are still local estimates, not official Lichess contribution stats.
 
-## Local metrics vs global Lichess queue status
+## Local metrics
 
 Local metrics come from machines participating in this community dashboard:
 
@@ -61,5 +61,3 @@ Local metrics come from machines participating in this community dashboard:
 - load average
 - memory available
 - last seen timestamp
-
-Global Lichess fishnet queue status comes from the public Lichess status endpoint. It describes the global fishnet queue, not the hackerspace's private contribution.

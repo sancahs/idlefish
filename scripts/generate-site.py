@@ -10,7 +10,6 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS_NODES = ROOT / "metrics" / "nodes"
-GLOBAL_STATUS = ROOT / "metrics" / "global-status.json"
 SITE = ROOT / "site"
 SITE_DATA = SITE / "data"
 
@@ -47,19 +46,6 @@ def read_nodes() -> list[dict[str, Any]]:
             }
         nodes.append(data)
     return nodes
-
-
-def read_global_status() -> dict[str, Any]:
-    if GLOBAL_STATUS.exists():
-        try:
-            return read_json(GLOBAL_STATUS)
-        except (OSError, json.JSONDecodeError) as exc:
-            return {"ok": False, "fetched_at_utc": now_utc(), "error": "JSONError", "message": str(exc)}
-
-    sample = SITE_DATA / "sample-global-status.json"
-    if sample.exists():
-        return read_json(sample)
-    return {"ok": False, "fetched_at_utc": now_utc(), "message": "No global status file available"}
 
 
 def cpu_today(nodes: list[dict[str, Any]]) -> float | None:
@@ -150,14 +136,9 @@ def ensure_index() -> None:
 def main() -> int:
     SITE_DATA.mkdir(parents=True, exist_ok=True)
     nodes = read_nodes()
-    global_status = read_global_status()
     payload = {"aggregate": aggregate(nodes), "nodes": nodes}
 
     (SITE_DATA / "nodes.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (SITE_DATA / "global-status.json").write_text(
-        json.dumps(global_status, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
     ensure_index()
     return 0
 

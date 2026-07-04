@@ -24,20 +24,17 @@ flowchart LR
   subgraph GitHub["idlefish repository"]
     Config["config/nodes.json"]
     FetchNodes["fetch-node-metrics.py"]
-    FetchLichess["fetch-lichess-fishnet-status.py"]
     Generate["generate-site.py"]
     SiteData["site/data/*.json"]
     Pages["GitHub Pages"]
 
     Config --> FetchNodes
     FetchNodes --> Generate
-    FetchLichess --> Generate
     Generate --> SiteData
     SiteData --> Pages
   end
 
   Endpoint -- "GET node metrics JSON" --> FetchNodes
-  Lichess["Public Lichess fishnet status"] -- "GET public status JSON" --> FetchLichess
   Visitors["Dashboard visitors"] --> Pages
 ```
 
@@ -48,17 +45,13 @@ sequenceDiagram
   participant Timer as GitHub Actions schedule
   participant Repo as idlefish repo
   participant Node as Node metrics URL
-  participant Lichess as Lichess public status
   participant Pages as GitHub Pages
 
   Timer->>Repo: checkout main
   Repo->>Repo: read config/nodes.json
   Repo->>Node: GET /idlefish/node.json
   Node-->>Repo: local metrics JSON
-  Repo->>Lichess: GET /fishnet/status
-  Lichess-->>Repo: global fishnet status
   Repo->>Repo: generate site/data/nodes.json
-  Repo->>Repo: generate site/data/global-status.json
   Repo->>Pages: deploy site/
 ```
 
@@ -85,7 +78,6 @@ The central repository is responsible for:
 
 - listing approved public metrics URLs in `config/nodes.json`
 - fetching each node's JSON file on a schedule
-- fetching public global Lichess fishnet status
 - generating static dashboard data
 - publishing the GitHub Pages site
 
@@ -99,13 +91,9 @@ flowchart TD
   E["host memory data"] --> C
   C --> F["public node JSON"]
   F --> G["GitHub Actions fetch-node-metrics.py"]
-  H["Lichess public fishnet status"] --> I["fetch-lichess-fishnet-status.py"]
   G --> J["generate-site.py"]
-  I --> J
   J --> K["site/data/nodes.json"]
-  J --> L["site/data/global-status.json"]
   K --> M["static dashboard"]
-  L --> M
 ```
 
 ## Why this shape
