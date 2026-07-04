@@ -29,6 +29,8 @@ Fishnet keys are personal secrets. Never commit them, publish them in dashboard 
 The public dashboard shows local community metrics:
 
 - estimated CPU-hours donated
+- analysis jobs completed
+- chess positions analyzed
 - active fishnet nodes
 - fishnet service health
 - service restarts
@@ -91,7 +93,7 @@ python3 scripts/generate-site.py
 Preview locally:
 
 ```bash
-python3 -m http.server -d site 8000
+just preview
 ```
 
 Then open:
@@ -99,6 +101,20 @@ Then open:
 ```text
 http://localhost:8000
 ```
+
+If that port is busy, pass another one:
+
+```bash
+just preview 8001
+```
+
+To serve the already generated files without fetching fresh node metrics:
+
+```bash
+just serve
+```
+
+`just preview` needs network access to fetch the public node metrics listed in `config/nodes.json`. If you are offline, use `just serve` to view the checked-in sample data.
 
 GitHub Pages publishes the `site/` directory using the workflow in [.github/workflows/pages.yml](.github/workflows/pages.yml). The workflow also runs on a schedule, fetches every URL listed in `config/nodes.json`, and rebuilds the dashboard without requiring node operators to commit anything.
 

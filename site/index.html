@@ -18,6 +18,14 @@
   <main>
     <section class="summary-grid" aria-label="Community metrics summary">
       <article class="metric">
+        <span class="metric-label">Analysis jobs completed</span>
+        <strong id="total-analysis-jobs">...</strong>
+      </article>
+      <article class="metric">
+        <span class="metric-label">Chess positions analyzed</span>
+        <strong id="total-positions">...</strong>
+      </article>
+      <article class="metric">
         <span class="metric-label">Estimated CPU-hours donated</span>
         <strong id="total-cpu-hours">...</strong>
       </article>
@@ -32,7 +40,7 @@
     </section>
 
     <section class="notice" aria-label="Metrics explanation">
-      <p>These are local community metrics. They are not official Lichess contribution stats. CPU-hours are estimated from local service/runtime data.</p>
+      <p>These local metrics estimate how much spare compute this community has donated to Lichess analysis. They are not official Lichess contribution stats.</p>
     </section>
 
     <section class="panel">
@@ -46,19 +54,34 @@
             <tr>
               <th scope="col">Node</th>
               <th scope="col">Status</th>
+              <th scope="col">Analysis jobs</th>
+              <th scope="col">Positions</th>
               <th scope="col">CPU-hours</th>
-              <th scope="col">Jobs</th>
-              <th scope="col">Batches</th>
               <th scope="col">Restarts</th>
-              <th scope="col">Load average</th>
-              <th scope="col">Memory available</th>
               <th scope="col">Last seen</th>
             </tr>
           </thead>
           <tbody id="nodes-table">
-            <tr><td colspan="9">Loading...</td></tr>
+            <tr><td colspan="6">Loading...</td></tr>
           </tbody>
         </table>
+      </div>
+      <div class="glossary" aria-label="Metric glossary">
+        <h3>Metric glossary</h3>
+        <dl>
+          <div>
+            <dt>Analysis jobs</dt>
+            <dd>Completed fishnet work items found in local logs. These usually map to Lichess analysis tasks, so they are the closest local estimate of games helped.</dd>
+          </div>
+          <div>
+            <dt>Positions</dt>
+            <dd>Chess positions processed by fishnet. This is the easiest way to picture the useful chess work behind the raw CPU time.</dd>
+          </div>
+          <div>
+            <dt>CPU-hours</dt>
+            <dd>Estimated CPU time consumed by the fishnet service. One full CPU core running for one hour is about one CPU-hour.</dd>
+          </div>
+        </dl>
       </div>
     </section>
   </main>

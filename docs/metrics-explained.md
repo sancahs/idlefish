@@ -26,6 +26,16 @@ Values may reset if the service, machine, or accounting state resets. Different 
 
 CPU-hours are the primary feel-good metric because they describe donated capacity without pretending to know more than the local node knows.
 
+## Contribution counters
+
+The most human-readable contribution counters are:
+
+- `fishnet_analysis_jobs_finished`: completed fishnet work items found in local logs
+- `fishnet_positions`: chess positions processed by fishnet
+- `fishnet_stockfish_nodes`: Stockfish search-tree nodes evaluated by the engine
+
+`fishnet_stockfish_nodes` and `fishnet_batches` are kept in the JSON because fishnet reports them, but they are lower-level counters and are not shown prominently on the public dashboard.
+
 ## Fishnet log counters
 
 When the local system journal is readable, `idlefish` also reports a few fishnet-derived counters from the current service run:

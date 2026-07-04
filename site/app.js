@@ -12,12 +12,8 @@ function formatDate(value) {
   return date.toLocaleString();
 }
 
-function formatMemory(kb) {
-  const value = Number(kb || 0);
-  if (!value) return "unknown";
-  const mib = value / 1024;
-  if (mib > 1024) return `${fmtNumber.format(mib / 1024)} GiB`;
-  return `${fmtInteger.format(mib)} MiB`;
+function nodeValue(node, lifetimeKey, currentKey) {
+  return node[lifetimeKey] ?? node[currentKey];
 }
 
 function statusBadge(active) {
@@ -29,6 +25,8 @@ function renderNodes(data) {
   const aggregate = data.aggregate || {};
   const nodes = data.nodes || [];
 
+  text("total-analysis-jobs", formatOptionalInteger(aggregate.total_fishnet_analysis_jobs_finished));
+  text("total-positions", formatOptionalInteger(aggregate.total_fishnet_positions));
   text("total-cpu-hours", fmtNumber.format(aggregate.total_estimated_cpu_hours || 0));
   text("active-nodes", `${aggregate.active_nodes || 0} / ${aggregate.total_nodes || 0}`);
   text("last-update", formatDate(aggregate.last_update_utc || aggregate.generated_at_utc));
@@ -36,7 +34,7 @@ function renderNodes(data) {
 
   const table = document.getElementById("nodes-table");
   if (!nodes.length) {
-    table.innerHTML = '<tr><td colspan="9">No node metrics found yet.</td></tr>';
+    table.innerHTML = '<tr><td colspan="6">No node metrics found yet.</td></tr>';
     return;
   }
 
@@ -44,12 +42,10 @@ function renderNodes(data) {
     <tr>
       <td>${escapeHtml(node.node_name || "unknown-node")}</td>
       <td>${statusBadge(Boolean(node.fishnet_active))}</td>
+      <td>${formatOptionalInteger(nodeValue(node, "lifetime_fishnet_analysis_jobs_finished", "fishnet_analysis_jobs_finished"))}</td>
+      <td>${formatOptionalInteger(nodeValue(node, "lifetime_fishnet_positions", "fishnet_positions"))}</td>
       <td>${fmtNumber.format(Number(node.lifetime_estimated_cpu_hours || node.estimated_cpu_hours || 0))}</td>
-      <td>${formatOptionalInteger(node.lifetime_fishnet_analysis_jobs_finished ?? node.fishnet_analysis_jobs_finished)}</td>
-      <td>${formatOptionalInteger(node.lifetime_fishnet_batches ?? node.fishnet_batches)}</td>
       <td>${fmtInteger.format(Number(node.n_restarts || 0))}</td>
-      <td>${escapeHtml(node.load_average || "unknown")}</td>
-      <td>${formatMemory(node.memory_available_kb)}</td>
       <td>${formatDate(node.timestamp_utc)}</td>
     </tr>
   `).join("");
@@ -79,7 +75,7 @@ async function loadDashboard() {
   } catch (error) {
     text("node-count", "Could not load dashboard data.");
     document.getElementById("nodes-table").innerHTML =
-      `<tr><td colspan="9">${escapeHtml(error.message)}</td></tr>`;
+      `<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;
   }
 }
 
